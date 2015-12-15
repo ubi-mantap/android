@@ -1,5 +1,7 @@
 package ubimantap.family_tracker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -46,6 +48,20 @@ public class MemberFragment extends Fragment {
 
         /*Log.d(tag, "call NotificationsTask()");
         new NotificationsTask().execute("Bobby");*/
+
+        /*Context context = getActivity().getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.preferences_key), context.MODE_PRIVATE);
+
+        String member = sharedPreferences.getString(getString(R.string.preferences_member), "");
+        if(member.equals("")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.putString(context.getResources().getString(R.string.preferences_member), "Kamila");
+            editor.commit();
+
+            member = sharedPreferences.getString(getString(R.string.preferences_member), "");
+        }
+        Log.d(tag, member);*/
 
         return rootView;
     }
