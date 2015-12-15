@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ColorPrimary">#00a882</color>
+    <color name="ColorPrimaryDark">#008768</color>
+    <color name="Colorlist">#FFFFFF</color>
+    <color name="Colorlistpress">#e6e5e5</color>
+    <color name="Colorlistpresslight">#0af5c0</color>
+    <color name="orange">#f68531</color>
+
+    <!-- button -->
+    <color name="btnormal">#ef254e6e</color>
+    <color name="btpress">#7792ccfa</color>
+
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="divider_gray">#808080</color>color>
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+</resources>
+
