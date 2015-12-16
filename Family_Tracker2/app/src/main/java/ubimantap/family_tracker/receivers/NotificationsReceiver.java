@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import ubimantap.family_tracker.MapsActivity;
 import ubimantap.family_tracker.MemberFragment;
-import ubimantap.family_tracker.tasks.DummyActivity;
 
 public class NotificationsReceiver extends BroadcastReceiver {
     private String tag = "NotificationsReceiver";
@@ -20,6 +19,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
 
         switch (action) {
             case "CALL" :
+                Log.d(tag, action);
                 Intent callIntent = new Intent();
 
                 callIntent.setAction(Intent.ACTION_CALL);
@@ -29,9 +29,20 @@ public class NotificationsReceiver extends BroadcastReceiver {
                 context.startActivity(callIntent);
 
                 break;
+            case "SMS" :
+                Log.d(tag, action);
+                break;
+            case "AGREE" :
+                Log.d(tag, action);
+                break;
+            case "DISAGREE" :
+                Log.d(tag, action);
+                break;
+            case "IGNORE" :
+                Log.d(tag, action);
+                break;
             default :
                 break;
         }
-        Log.d(tag, action);
     }
 }

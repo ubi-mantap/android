@@ -24,7 +24,6 @@ import android.widget.RemoteViews;
 import java.lang.reflect.Array;
 
 import ubimantap.family_tracker.receivers.NotificationsReceiver;
-import ubimantap.family_tracker.tasks.DummyActivity;
 import ubimantap.family_tracker.tasks.NotificationsTask;
 import ubimantap.family_tracker.tasks.RegisterTask;
 import ubimantap.family_tracker.tasks.TrackersTask;
@@ -91,7 +90,7 @@ public class MemberFragment extends Fragment {
         Log.d(tag, member + " : " + phone);*/
 
         // notification - action
-        String type = "update";
+        /*String type = "update";
 
         String title = "";
         String text = "";
@@ -100,6 +99,12 @@ public class MemberFragment extends Fragment {
         String[] actions = new String[] {};
 
         switch (type) {
+            case "update" :
+                title = "Alert";
+                text = "Son in rain";
+                ticker = "New Alert !";
+                actions = new String[] {"CALL", "SMS", "IGNORE"};
+                break;
             case "trackRequest" :
                 title = "Track Request";
                 text = "Kamila want to track you";
@@ -110,12 +115,6 @@ public class MemberFragment extends Fragment {
                 title = "Track Response";
                 text = "Bobby accept your track request";
                 ticker = "New Track Response !";
-                break;
-            case "update" :
-                title = "Alert";
-                text = "Son in rain";
-                ticker = "New Alert !";
-                actions = new String[] {"CALL", "SMS", "IGNORE"};
                 break;
             default :
                 break;
@@ -129,15 +128,17 @@ public class MemberFragment extends Fragment {
                 .setContentText(text)
                 .setTicker(ticker);
 
+        Intent intent = new Intent(context, MapsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);
+
         Intent[] intents = new Intent[actions.length];
         PendingIntent[] pendingIntents = new PendingIntent[actions.length];
 
         for (int ii = 0; ii < actions.length; ii++) {
             intents[ii] = new Intent(context, NotificationsReceiver.class);
-            //intents[ii] = new Intent(context, MapsActivity.class);
             intents[ii].setAction(actions[ii]);
             pendingIntents[ii] = PendingIntent.getBroadcast(context, 0, intents[ii], 0);
-            //pendingIntents[ii] = PendingIntent.getActivity(context, 0, intents[ii], 0);
             builder.addAction(0, actions[ii], pendingIntents[ii]);
         }
 
@@ -145,7 +146,7 @@ public class MemberFragment extends Fragment {
         builder.setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
+        notificationManager.notify(0, builder.build());*/
 
         return rootView;
     }
