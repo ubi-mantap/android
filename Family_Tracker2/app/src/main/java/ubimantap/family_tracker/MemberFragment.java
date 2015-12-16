@@ -124,12 +124,14 @@ public class MemberFragment extends Fragment {
         PendingIntent[] pendingIntents = new PendingIntent[actions.length];
 
         for (int ii = 0; ii < actions.length; ii++) {
-            //intents[ii] = new Intent(context, NotificationsReceiver.class);
-            intents[ii] = new Intent(context, DummyActivity.class);
+            intents[ii] = new Intent(context, NotificationsReceiver.class);
+            //intents[ii] = new Intent(context, MapsActivity.class);
             intents[ii].setAction(actions[ii]);
-            //pendingIntents[ii] = PendingIntent.getBroadcast(context, 0, intents[ii], 0);
-            pendingIntents[ii] = PendingIntent.getActivity(context, 0, intents[ii], 0);
+            pendingIntents[ii] = PendingIntent.getBroadcast(context, 0, intents[ii], 0);
+            //pendingIntents[ii] = PendingIntent.getActivity(context, 0, intents[ii], 0);
             builder.addAction(0, actions[ii], pendingIntents[ii]);
+
+            builder.setAutoCancel(true);
             builder.setPriority(Notification.PRIORITY_MAX);
         }
 

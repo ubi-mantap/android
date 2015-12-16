@@ -16,7 +16,6 @@ public class NotificationsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        Intent mainIntent = new Intent(context, DummyActivity.class);
-        context.startActivity(mainIntent);
+        Log.d(tag, action);
     }
 }
