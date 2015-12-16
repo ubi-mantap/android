@@ -3,10 +3,12 @@ package ubimantap.family_tracker.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import ubimantap.family_tracker.MapsActivity;
+import ubimantap.family_tracker.MemberFragment;
 import ubimantap.family_tracker.tasks.DummyActivity;
 
 public class NotificationsReceiver extends BroadcastReceiver {
@@ -16,6 +18,20 @@ public class NotificationsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
+        switch (action) {
+            case "CALL" :
+                Intent callIntent = new Intent();
+
+                callIntent.setAction(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:081385935613"));
+                callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(callIntent);
+
+                break;
+            default :
+                break;
+        }
         Log.d(tag, action);
     }
 }

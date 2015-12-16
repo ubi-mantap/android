@@ -41,30 +41,38 @@ public class MemberFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
 
+        // register
         /*Log.d("MemberFragment", "call RegisterTask()");
         new RegisterTask().execute("Kamila", "081385935613");
 
         Log.d("MemberFragment", "call RegisterTask()");
         new RegisterTask().execute("Bobby", "089688157020");*/
 
+        // init
         /*Log.d(tag, "call TrackingsInitTask()");
         new TrackingsInitTask().execute("Kamila", "Bobby");*/
 
+        // start
         /*Log.d(tag, "call TrackingsStartTask()");
         new TrackingsStartTask().execute("Kamila", "Bobby", "true");*/
 
+        // stop
         /*Log.d(tag, "call TrackingsStopTask()");
         new TrackingsStopTask().execute("Kamila", "Bobby");*/
 
+        // trackers
         /*Log.d(tag, "call TrackersTask()");
         new TrackersTask().execute("Bobby");*/
 
+        // trackings
         /*Log.d(tag, "call TrackingsTask()");
         new TrackersTask().execute("Kamila");*/
 
+        // notification
         /*Log.d(tag, "call NotificationsTask()");
         new NotificationsTask().execute("Bobby");*/
 
+        // register - login
         /*Context context = getActivity().getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.preferences_key), context.MODE_PRIVATE);
 
@@ -82,6 +90,7 @@ public class MemberFragment extends Fragment {
         }
         Log.d(tag, member + " : " + phone);*/
 
+        // notification - action
         String type = "update";
 
         String title = "";
@@ -130,10 +139,10 @@ public class MemberFragment extends Fragment {
             pendingIntents[ii] = PendingIntent.getBroadcast(context, 0, intents[ii], 0);
             //pendingIntents[ii] = PendingIntent.getActivity(context, 0, intents[ii], 0);
             builder.addAction(0, actions[ii], pendingIntents[ii]);
-
-            builder.setAutoCancel(true);
-            builder.setPriority(Notification.PRIORITY_MAX);
         }
+
+        builder.setPriority(Notification.PRIORITY_MAX);
+        builder.setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, builder.build());
