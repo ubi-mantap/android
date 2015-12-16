@@ -1,13 +1,20 @@
 package ubimantap.family_tracker;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 
 import ubimantap.family_tracker.tasks.NotificationsTask;
 import ubimantap.family_tracker.tasks.RegisterTask;
@@ -53,15 +60,41 @@ public class MemberFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.preferences_key), context.MODE_PRIVATE);
 
         String member = sharedPreferences.getString(getString(R.string.preferences_member), "");
-        if(member.equals("")) {
+        String phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
+        if(member.equals("") || phone.equals("")) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.putString(context.getResources().getString(R.string.preferences_member), "Kamila");
+            editor.putString(context.getResources().getString(R.string.preferences_phone), "081385935613");
             editor.commit();
 
             member = sharedPreferences.getString(getString(R.string.preferences_member), "");
+            phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
         }
-        Log.d(tag, member);*/
+        Log.d(tag, member + " : " + phone);*/
+
+        /*Context context = getActivity().getApplicationContext();
+        NotificationCompat.Builder builder =
+            new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.common_signin_btn_icon_dark)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!");
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        String[] events = new String[6];
+        inboxStyle.setBigContentTitle("Event tracker details:");
+        for (int i=0; i < events.length; i++) {
+            inboxStyle.addLine(events[i]);
+        }
+        builder.setStyle(inboxStyle);
+
+        Intent intent = new Intent(context, MapsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());*/
 
         return rootView;
     }
