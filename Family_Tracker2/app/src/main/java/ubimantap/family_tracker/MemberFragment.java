@@ -23,6 +23,7 @@ import android.widget.RemoteViews;
 
 import java.lang.reflect.Array;
 
+import ubimantap.family_tracker.functions.Functions;
 import ubimantap.family_tracker.receivers.NotificationsReceiver;
 import ubimantap.family_tracker.tasks.NotificationsTask;
 import ubimantap.family_tracker.tasks.RegisterTask;
@@ -39,55 +40,6 @@ public class MemberFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
-
-        // register
-        /*Log.d("MemberFragment", "call RegisterTask()");
-        new RegisterTask().execute("Kamila", "081385935613");
-
-        Log.d("MemberFragment", "call RegisterTask()");
-        new RegisterTask().execute("Bobby", "089688157020");*/
-
-        // init
-        /*Log.d(tag, "call TrackingsInitTask()");
-        new TrackingsInitTask().execute("Kamila", "Bobby");*/
-
-        // start
-        /*Log.d(tag, "call TrackingsStartTask()");
-        new TrackingsStartTask().execute("Kamila", "Bobby", "true");*/
-
-        // stop
-        /*Log.d(tag, "call TrackingsStopTask()");
-        new TrackingsStopTask().execute("Kamila", "Bobby");*/
-
-        // trackers
-        /*Log.d(tag, "call TrackersTask()");
-        new TrackersTask().execute("Bobby");*/
-
-        // trackings
-        /*Log.d(tag, "call TrackingsTask()");
-        new TrackersTask().execute("Kamila");*/
-
-        // notification
-        /*Log.d(tag, "call NotificationsTask()");
-        new NotificationsTask().execute("Bobby");*/
-
-        // register - login
-        /*Context context = getActivity().getApplicationContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.preferences_key), context.MODE_PRIVATE);
-
-        String member = sharedPreferences.getString(getString(R.string.preferences_member), "");
-        String phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
-        if(member.equals("") || phone.equals("")) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.putString(context.getResources().getString(R.string.preferences_member), "Kamila");
-            editor.putString(context.getResources().getString(R.string.preferences_phone), "081385935613");
-            editor.commit();
-
-            member = sharedPreferences.getString(getString(R.string.preferences_member), "");
-            phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
-        }
-        Log.d(tag, member + " : " + phone);*/
 
         // notification - action
         /*String type = "update";

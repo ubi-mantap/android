@@ -1,9 +1,13 @@
 package ubimantap.family_tracker;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +30,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ubimantap.family_tracker.functions.Functions;
+import ubimantap.family_tracker.receivers.ApplicationsReceiver;
+
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener, View.OnClickListener, AdapterView.OnItemClickListener {
+    private String tag = "MapsActivity";
+    private String username = "";
+    private String phone = "";
 
     Context context;
 
@@ -99,6 +109,11 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         CameraUpdate zoom =  CameraUpdateFactory.zoomTo(15);
         googleMap.moveCamera(center);
         googleMap.animateCamera(zoom);
+
+        this.username = "Dummy";
+        this.phone = "000000000000";
+        new Functions(this).register("Dummy", "000000000000");
+        scheduleNotification("NOTIFICATIONS", 5 * 1000);
     }
 
     /*
@@ -183,7 +198,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                 break;
             case 1:
                 finish();
-                Intent i= new Intent(MapsActivity.this,MapsActivity.class);
+                Intent i = new Intent(MapsActivity.this,MapsActivity.class);
                 startActivity(i);
                 break;
             case 2:
@@ -213,5 +228,19 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
     }
 
+    public void scheduleNotification(String action, int delay) {
+        Log.d(tag, "scheduleNotification : " + action + " [" + delay + "]");
 
+        Intent intent = new Intent(this, ApplicationsReceiver.class);
+        intent.setAction(action);
+        intent.putExtra("username", this.username);
+        intent.putExtra("phone", this.phone);
+
+        Log.d(tag, this.username + " [" + this.phone + "]");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), delay, pendingIntent);
+    }
 }
