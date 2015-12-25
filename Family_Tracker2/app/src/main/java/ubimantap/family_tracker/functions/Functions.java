@@ -67,11 +67,11 @@ public class Functions {
         editor.clear();
 
         ArrayList<Member> members = new ArrayList<Member>();
-        members.add(new Member(0, "Kamila", "", 0, 0));
-        members.add(new Member(0, "Tyas", "", 0, 0));
-        members.add(new Member(0, "Bobby", "", 0, 0));
-        members.add(new Member(0, "Mukhlis", "", 0, 0));
-        members.add(new Member(0, "Eteng", "", 0, 0));
+        members.add(new Member(0, "Kamila", "", 0, 0, ""));
+        members.add(new Member(0, "Tyas", "", 0, 0, ""));
+        members.add(new Member(0, "Bobby", "", 0, 0, ""));
+        members.add(new Member(0, "Mukhlis", "", 0, 0, ""));
+        members.add(new Member(0, "Eteng", "", 0, 0, ""));
         members.remove(username);
 
         JSONArray jsonArray = new JSONArray();
@@ -84,6 +84,7 @@ public class Functions {
                 jsonObject.put("status", members.get(ii).getStatus());
                 jsonObject.put("lat", members.get(ii).getLat());
                 jsonObject.put("lng", members.get(ii).getLng());
+                jsonObject.put("position", members.get(ii).getPosition());
 
                 jsonArray.put(jsonObject);
             } catch (JSONException e) {
@@ -109,7 +110,8 @@ public class Functions {
                 String status = jsonObject.getString("status");
                 double lat = jsonObject.getDouble("lat");
                 double lng = jsonObject.getDouble("lng");
-                Member member = new Member(pp, name, status, lat, lng);
+                String position = jsonObject.getString("position");
+                Member member = new Member(pp, name, status, lat, lng, position);
 
                 members.add(member);
             }
@@ -140,9 +142,17 @@ public class Functions {
         new TrackersTask().execute(username);
     }
 
+    public void setTrackers(JSONObject jsonObject) {
+
+    }
+
     public void trackings(String username) {
         Log.d(tag, "trackingsTask : " + username);
         new TrackingsTask().execute(username);
+    }
+
+    public void setTrackings(JSONObject jsonObject) {
+
     }
 
     public void notifications(String username) {

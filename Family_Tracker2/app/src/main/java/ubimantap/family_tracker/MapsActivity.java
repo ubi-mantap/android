@@ -45,17 +45,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     String NAME = "Family Tracker";
     int PROFILE = R.drawable.ic_launcher;
 
-    // Declaring DrawerLayout
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
 
-    // Declaring the Toolbar Object
     private Toolbar toolbar;
     private RelativeLayout rl;
     ListView mListView;
     ListAdapter mAdapter;
 
-    //action bar
     TextView textAction;
     ImageView imgAction;
 
@@ -63,14 +60,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     MarkerOptions markerOptions;
     LatLng latLng;
     MapFragment mapFragment;
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
         imgAction = (ImageView) findViewById(R.id.iconact);
         textAction = (TextView) findViewById(R.id.txtact);
         setTitle(TITLES[0], HEADER[0]);
@@ -81,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         mListView.setOnItemClickListener(new SlideMenuClickListener());
 
 
-        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar,R.string.openDrawer,R.string.closeDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -92,9 +89,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
             }
-        }; // Drawer Toggle Object Made
-        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
-        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+        };
+        Drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
 
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -121,26 +118,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     }
 
     private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             if (mMap != null) {
                 setUpMap();
             }
         }
     }
 
-
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
-    /*
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
@@ -171,24 +156,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         return false;
     }
 
-    /**
-     * Slide menu item click listener
-     * */
-    private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
+    private class SlideMenuClickListener implements ListView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            // display view for selected nav drawer item
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             displayView(position);
         }
     }
 
-    /**
-     * Diplaying fragment view for selected nav drawer list item
-     * */
     private void displayView(int position) {
-        // update the main content by replacing fragments
         Fragment fragment = null;
         switch (position) {
             case 0:
@@ -208,14 +183,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_container , fragment).commit();
-            // update selected item and title, then close the drawer
+
             mListView.setItemChecked(position, true);
             mListView.setSelection(position);
             setTitle(TITLES[position-1],HEADER[position-1]);
             Drawer.closeDrawer(mListView);
         } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
+            Log.e(tag, "[ERROR] in creating fragment");
         }
     }
 

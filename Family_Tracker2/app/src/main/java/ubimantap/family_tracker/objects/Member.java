@@ -15,13 +15,22 @@ public class Member {
     private String status;
     private double lat;
     private double lng;
+    private String position;
 
-    public Member(int pp, String name, String status, double lat, double lng) {
+    /*TextView nameView;
+    TextView positionView;
+    ImageView profpicView;
+    Button bt_track_stop;
+    Button bt_stop;
+    Button bt_track;*/
+
+    public Member(int pp, String name, String status, double lat, double lng, String position) {
         this.pp = pp;
         this.name = name;
         this.status = status;
         this.lat = lat;
         this.lng = lng;
+        this.position = position;
     }
 
     public int getPp() {
@@ -64,6 +73,14 @@ public class Member {
         this.lng = lng;
     }
 
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     @Override
     public boolean equals(Object object) {
         if(object == null) return false;
@@ -77,4 +94,36 @@ public class Member {
     public String toString() {
         return getName();
     }
+
+    /*public View getView(int viewType, View convertView, ViewGroup parent) {
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_member, parent, false); //Inflating the layout
+        nameView = (TextView) convertView.findViewById(R.id.nameText);
+        positionView = (TextView) convertView.findViewById(R.id.positionText);
+        if (status.equals("no track")){
+            bt_track_stop = (Button) convertView.findViewById(R.id.btTrack);
+            bt_stop = (Button) convertView.findViewById(R.id.btStop);
+            bt_stop.setVisibility(View.INVISIBLE);
+            bt_track_stop.setVisibility(View.VISIBLE);
+        }
+        else {
+            bt_track_stop = (Button) convertView.findViewById(R.id.btStop);
+            bt_track = (Button) convertView.findViewById(R.id.btTrack);
+            bt_track.setVisibility(View.INVISIBLE);
+            bt_track_stop.setVisibility(View.VISIBLE);
+        }
+        profpicView = (ImageView) convertView.findViewById(R.id.profpicnya);// Creating ImageView object with the id of ImageView from item_row.xml                                               // setting holder id as 1 as the object being populated are of type item row
+        nameView.setText(name);
+        profpicView.setImageResource(pp);
+        return convertView;
+    }
+
+
+    public void track(View view) {
+        //status ganti dari "no track -> track"
+
+    }
+
+    public void stop(View view) {
+        //status ganti dari "track -> no track"
+    }*/
 }
