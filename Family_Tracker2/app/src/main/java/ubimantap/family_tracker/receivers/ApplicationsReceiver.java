@@ -22,9 +22,9 @@ public class ApplicationsReceiver extends BroadcastReceiver {
                 Log.d(tag, "NOTIFICATIONS : " + username);
                 new Functions(context).notifications(username);
                 break;
-            case "TRACKINGS" :
-                break;
-            case "TRACKERS" :
+            case "TRACKS" :
+                Log.d(tag, "TRACKS : " + username);
+                new Functions(context).tracks(username);
                 break;
             default :
                 break;
