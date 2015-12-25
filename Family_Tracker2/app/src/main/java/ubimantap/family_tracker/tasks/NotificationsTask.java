@@ -115,12 +115,10 @@ public class NotificationsTask extends AsyncTask<String, Void, String> {
                     case "trackResponse" :
                         title = "Track Response";
                         ticker = "New Track Response !";
-                        //do get status == true ? update sharedpref : break
                         break;
                     case "trackStop" :
                         title = "Track Stop";
                         ticker = "New Track Stop !";
-                        //do update sharedpref
                         break;
                     default :
                         break;
