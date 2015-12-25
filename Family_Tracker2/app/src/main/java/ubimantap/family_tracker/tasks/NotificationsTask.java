@@ -94,12 +94,7 @@ public class NotificationsTask extends AsyncTask<String, Void, String> {
 
                 String type = notification.getString("type");
                 String message = notification.getString("message");
-
-                JSONObject data = notification.getJSONObject("data");
-
-                Log.d(tag, "type :" + type);
-                Log.d(tag, "message :" + message);
-                Log.d(tag, "data :" + data.toString());
+                JSONObject data = (JSONObject) notification.get("data");
 
                 String title = "";
                 String ticker = "";
@@ -120,6 +115,10 @@ public class NotificationsTask extends AsyncTask<String, Void, String> {
                     case "trackResponse" :
                         title = "Track Response";
                         ticker = "New Track Response !";
+                        break;
+                    case "trackStop" :
+                        title = "Track Stop";
+                        ticker = "New Track Stop !";
                         break;
                     default :
                         break;
@@ -142,6 +141,17 @@ public class NotificationsTask extends AsyncTask<String, Void, String> {
                 for (int jj = 0; jj < actions.length; jj++) {
                     intents[jj] = new Intent(this.context, NotificationsReceiver.class);
                     intents[jj].setAction(actions[jj]);
+                    switch(type) {
+                        case "update" :
+                            intents[jj].putExtra("phone", data.getString("phone"));
+                            break;
+                        case "trackRequest" :
+                            intents[jj].putExtra("trackerUsername", data.getString("trackerUsername"));
+                            intents[jj].putExtra("trackedUsername", data.getString("trackedUsername"));
+                            break;
+                        default :
+                            break;
+                    }
                     pendingIntents[jj] = PendingIntent.getBroadcast(this.context, 0, intents[jj], 0);
                     builder.addAction(0, actions[jj], pendingIntents[jj]);
                 }

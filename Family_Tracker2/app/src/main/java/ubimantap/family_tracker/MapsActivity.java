@@ -111,6 +111,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
         // it should be in LoginActivity
         new Functions(this).register("Kamila", "081385935613");
+        //new Functions(this).register("Bobby", "089688157020");
 
         setMember();
         Log.d(tag, "this.username = " + this.username);
