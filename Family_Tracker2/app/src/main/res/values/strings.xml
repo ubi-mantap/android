@@ -11,5 +11,8 @@
     <string name="preferences_key">ubimantap.family_tracker</string>
     <string name="preferences_username">member</string>
     <string name="preferences_phone">phone</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
