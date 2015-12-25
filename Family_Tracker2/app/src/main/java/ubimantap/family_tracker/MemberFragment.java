@@ -38,6 +38,7 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
         //members = new Functions(this.context).getMember();
         //Log.d(tag, members.size() + "");
 
+<<<<<<< HEAD
         pp.add(R.drawable.ic_launcher);
         pp.add(R.drawable.ic_launcher);
         name.add("tyas");
@@ -50,6 +51,9 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
         lat.add(1.2);
         lng.add(0.3);
         lng.add(1.2);
+=======
+        members = new Functions(this.context).getMember();
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
 
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
         memberlistView = (ListView) rootView.findViewById(R.id.list_member);

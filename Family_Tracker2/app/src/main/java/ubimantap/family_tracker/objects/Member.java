@@ -1,6 +1,9 @@
 package ubimantap.family_tracker.objects;
 
+<<<<<<< HEAD
 import android.content.Context;
+=======
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 
 import ubimantap.family_tracker.R;
 
+<<<<<<< HEAD
 public class Member extends BaseAdapter implements View.OnClickListener {
 
     private Context context;
@@ -23,6 +27,17 @@ public class Member extends BaseAdapter implements View.OnClickListener {
     private ArrayList<Double> lat;
     private ArrayList<Double> lng;
     private ArrayList<String> position;
+=======
+public class Member {
+    private String tag = "Member";
+
+    private int pp;
+    private String name;
+    private String status;
+    private double lat;
+    private double lng;
+    private String position;
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
 
     TextView nameView;
     TextView positionView;
@@ -60,8 +75,19 @@ public class Member extends BaseAdapter implements View.OnClickListener {
         return status.get(i);
     }
 
+<<<<<<< HEAD
     public void setStatus(int i, String str) {
         status.set(i, str);
+=======
+    @Override
+    public boolean equals(Object object) {
+        Log.d(tag, "EQUALS");
+        if(object == null) return false;
+        if(object == this) return true;
+
+        Member member = (Member) object;
+        return member.getName().equals(this.getName());
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
     }
 
     @Override
