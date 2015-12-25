@@ -3,7 +3,6 @@ package ubimantap.family_tracker.listeners;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,11 +28,28 @@ public class ButtonsListener implements View.OnClickListener {
         String username = editTextUsername.getText().toString();
         String phone = editTextPhone.getText().toString();
 
+<<<<<<< HEAD
         // new Functions(this.context).login(username, phone);
         new Functions(this.context).register(username, phone);
         new Functions(this.context).setMember(username, phone);
         new Functions(this.context).trackers(username);
         new Functions(this.context).trackings(username);
+=======
+<<<<<<< HEAD
+        // new Functions(this.context).login(username, phone);
+        new Functions(this.context).register(username, phone);
+        //new Functions(this.context).setMember(username, phone);
+        new Functions(this.context).trackers(username);
+        new Functions(this.context).trackings(username);
+=======
+        new Functions(this.context).login(username, phone);
+        // new Functions(this.context).register(username, phone);
+        new Functions(this.context).setMember(username);
+
+        new Functions(this.context).tracks(username);
+        new Functions(this.context).notifications(username);
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
 
         ((Activity) this.context).finish();
         Intent intent = new Intent(this.context, MapsActivity.class);

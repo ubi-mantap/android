@@ -60,19 +60,42 @@ public class Functions {
         return new Owner(username, phone);
     }
 
+<<<<<<< HEAD
     public void setMember(String username, String phone) {
+=======
+<<<<<<< HEAD
+    /*
+    public void setMember(String username, String phone) {
+=======
+    public void setMember(String username) {
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
         ArrayList<Member> members = new ArrayList<Member>();
         members.add(new Member(0, "Kamila", "", 0, 0, ""));
         members.add(new Member(0, "Tyas", "", 0, 0, ""));
         members.add(new Member(0, "Bobby", "", 0, 0, ""));
         members.add(new Member(0, "Mukhlis", "", 0, 0, ""));
         members.add(new Member(0, "Eteng", "", 0, 0, ""));
+<<<<<<< HEAD
         members.remove(username);
+=======
+        members.remove(username);*
+=======
+        ArrayList<Member> members = new ArrayList<>();
+        for(int ii = 0; ii < usernames.size(); ii++) {
+            members.add(new Member(0, usernames.get(ii), "", 0, 0, ""));
+        }
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
 
         JSONArray jsonArray = new JSONArray();
         for(int ii = 0; ii < members.size(); ii++) {
@@ -94,7 +117,16 @@ public class Functions {
 
         editor.putString("member", jsonArray.toString());
         editor.commit();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    }*/
+=======
+
+        Log.d(tag, "setMember : done set member");
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
     }
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
 
     public ArrayList<Member> getMember() {
         ArrayList<Member> members = new ArrayList<>();
@@ -111,9 +143,17 @@ public class Functions {
                 double lat = jsonObject.getDouble("lat");
                 double lng = jsonObject.getDouble("lng");
                 String position = jsonObject.getString("position");
-                Member member = new Member(pp, name, status, lat, lng, position);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                //Member member = new Member(pp, name, status, lat, lng, position);
+=======
 
-                members.add(member);
+>>>>>>> b7a7ecd6c2fe17adec5c20fe2b0b37cf6d11b739
+                Member member = new Member(pp, name, status, lat, lng, position);
+>>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
+
+                //members.add(member);
             }
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
