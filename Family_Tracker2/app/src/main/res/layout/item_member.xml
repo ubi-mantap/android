@@ -54,6 +54,7 @@
             android:textColor="@color/ColorPrimaryDark"
             android:text="Track"
             android:textSize="8pt"
+            android:onClick="track"
             android:visibility="visible"/>
 
         <Button
@@ -69,6 +70,7 @@
             android:textColor="@color/ColorPrimaryDark"
             android:text="Stop"
             android:textSize="8pt"
+            android:onClick="stop"
             android:visibility="invisible"/>
 
     </RelativeLayout>

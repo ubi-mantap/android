@@ -108,6 +108,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
         owner = new Functions(this).getOwner();
         //scheduleNotification("NOTIFICATIONS", 10 * 1000);
+        //scheduleNotification("TRACKS", 5 * 60 * 1000);
     }
 
     /*

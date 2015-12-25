@@ -58,7 +58,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
                 Log.d(tag, action + trackerUsername + " -> " + trackedUsername);
 
                 new Functions(context).trackingsStart(trackerUsername, trackedUsername, "true");
-
+                //do update sharedpref
                 break;
             case "DISAGREE" :
                 trackerUsername = intent.getStringExtra("trackerUsername");
