@@ -33,7 +33,6 @@ public class MemberFragment extends Fragment {
         this.context = getActivity().getApplicationContext();
 
         members = new Functions(this.context).getMember();
-        Log.d(tag, members.size() + "");
 
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
         memberlistView = (ListView) rootView.findViewById(R.id.list_member);

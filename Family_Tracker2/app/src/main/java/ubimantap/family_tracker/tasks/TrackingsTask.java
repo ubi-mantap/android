@@ -1,5 +1,6 @@
 package ubimantap.family_tracker.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,9 +19,11 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
+import ubimantap.family_tracker.functions.Functions;
+
 public class TrackingsTask extends AsyncTask<String, Void, String> {
     private String tag = "TrackingsTask";
-    private String endpoint = "https://family-tracker.herokuapp.com/trackingss?username=";
+    private String endpoint = "https://family-tracker.herokuapp.com/trackings?username=";
 
     @Override
     protected String doInBackground(String... strings) {

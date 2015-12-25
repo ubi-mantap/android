@@ -1,5 +1,6 @@
 package ubimantap.family_tracker.objects;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import ubimantap.family_tracker.R;
 
 public class Member {
+    private String tag = "Member";
+
     private int pp;
     private String name;
     private String status;
@@ -83,6 +86,7 @@ public class Member {
 
     @Override
     public boolean equals(Object object) {
+        Log.d(tag, "EQUALS");
         if(object == null) return false;
         if(object == this) return true;
 

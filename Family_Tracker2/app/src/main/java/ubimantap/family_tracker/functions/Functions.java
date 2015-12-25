@@ -3,12 +3,15 @@ package ubimantap.family_tracker.functions;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import ubimantap.family_tracker.objects.Member;
 import ubimantap.family_tracker.R;
@@ -20,6 +23,7 @@ import ubimantap.family_tracker.tasks.TrackingsInitTask;
 import ubimantap.family_tracker.tasks.TrackingsStartTask;
 import ubimantap.family_tracker.tasks.TrackingsStopTask;
 import ubimantap.family_tracker.tasks.TrackingsTask;
+import ubimantap.family_tracker.tasks.TracksTask;
 
 public class Functions {
     private String tag = "Functions";
@@ -45,7 +49,6 @@ public class Functions {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
         editor.putString(context.getResources().getString(R.string.preferences_username), username);
         editor.putString(context.getResources().getString(R.string.preferences_phone), phone);
         editor.commit();
@@ -60,19 +63,22 @@ public class Functions {
         return new Owner(username, phone);
     }
 
-    public void setMember(String username, String phone) {
+    public void setMember(String username) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
+        ArrayList<String> usernames = new ArrayList<>();
+        usernames.add("Kamila");
+        usernames.add("Tyas");
+        usernames.add("Bobby");
+        usernames.add("Mukhlis");
+        usernames.add("Eteng");
+        Log.d(tag, "remove :" + username);
+        usernames.remove(username);
 
-        ArrayList<Member> members = new ArrayList<Member>();
-        members.add(new Member(0, "Kamila", "", 0, 0, ""));
-        members.add(new Member(0, "Tyas", "", 0, 0, ""));
-        members.add(new Member(0, "Bobby", "", 0, 0, ""));
-        members.add(new Member(0, "Mukhlis", "", 0, 0, ""));
-        members.add(new Member(0, "Eteng", "", 0, 0, ""));
-        members.remove(username);
+        ArrayList<Member> members = new ArrayList<>();
+        for(int ii = 0; ii < usernames.size(); ii++) {
+            members.add(new Member(0, usernames.get(ii), "", 0, 0, ""));
+        }
 
         JSONArray jsonArray = new JSONArray();
         for(int ii = 0; ii < members.size(); ii++) {
@@ -92,16 +98,21 @@ public class Functions {
             }
         }
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("member", jsonArray.toString());
         editor.commit();
+
+        Log.d(tag, "setMember : done set member");
     }
 
     public ArrayList<Member> getMember() {
+        Log.d(tag, "in getMember");
         ArrayList<Member> members = new ArrayList<>();
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(this.context.getString(R.string.preferences_key), this.context.MODE_PRIVATE);
 
         try {
             JSONArray jsonArray = new JSONArray(sharedPreferences.getString("member", ""));
+            Log.d(tag, jsonArray.toString());
             for(int ii = 0; ii < jsonArray.length(); ii++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(ii);
 
@@ -111,6 +122,7 @@ public class Functions {
                 double lat = jsonObject.getDouble("lat");
                 double lng = jsonObject.getDouble("lng");
                 String position = jsonObject.getString("position");
+
                 Member member = new Member(pp, name, status, lat, lng, position);
 
                 members.add(member);
@@ -120,6 +132,15 @@ public class Functions {
         }
 
         return members;
+    }
+
+    public void updateMemberStatus(String username, String status) {
+
+    }
+
+    public void debugMember() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+        Log.d(tag, "debugMember : " + sharedPreferences.getString("member", ""));
     }
 
     public void trackingsInit(String trackerUsername, String trackedUsername) {
@@ -137,22 +158,135 @@ public class Functions {
         new TrackingsStopTask().execute(trackerUsername, trackedUsername);
     }
 
-    public void trackers(String username) {
-        Log.d(tag, "trackersTask : " + username);
-        new TrackersTask().execute(username);
+    public void tracks(String username) {
+        new TracksTask(context).execute(username);
     }
 
     public void setTrackers(JSONObject jsonObject) {
+        try {
+            Log.d(tag, "setTrackers : " + jsonObject.toString());
+            HashSet<String> set = new HashSet<>();
 
-    }
+            JSONArray jsonArray = jsonObject.getJSONArray("trackers");
+            for(int ii = 0; ii < jsonArray.length(); ii++) {
+                JSONObject tracker = jsonArray.getJSONObject(ii);
+                set.add(tracker.getString("username"));
+            }
 
-    public void trackings(String username) {
-        Log.d(tag, "trackingsTask : " + username);
-        new TrackingsTask().execute(username);
+            String trackers = "false";
+            ArrayList<Member> members = getMember();
+            for(int ii = 0; ii < members.size(); ii++) {
+                Member member = members.get(ii);
+                if(set.contains(member.getName())) {
+                    member.setStatus("trackers");
+                    members.set(ii, member);
+
+                    trackers = "true";
+                }
+            }
+
+            JSONArray membersNew = new JSONArray();
+            for(int ii = 0; ii < members.size(); ii++) {
+                try {
+                    JSONObject memberNew = new JSONObject();
+
+                    memberNew.put("pp", members.get(ii).getPp());
+                    memberNew.put("name", members.get(ii).getName());
+                    memberNew.put("status", members.get(ii).getStatus());
+                    memberNew.put("lat", members.get(ii).getLat());
+                    memberNew.put("lng", members.get(ii).getLng());
+                    memberNew.put("position", members.get(ii).getPosition());
+
+                    membersNew.put(memberNew);
+                } catch (JSONException e) {
+                    Log.d(tag, e.getMessage());
+                }
+            }
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(context.getResources().getString(R.string.preferences_trackers), trackers);
+            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
+            editor.commit();
+
+            if(trackers.equals("true")) {
+                //do scheduling push location to server
+                Log.d(tag, "setTrackers : SCHEDULING PUSH LAT-LNG TO SERVER");
+            }
+        } catch (JSONException e) {
+            Log.d(tag, e.getMessage());
+        }
     }
 
     public void setTrackings(JSONObject jsonObject) {
+        try {
+            Log.d(tag, "setTrackings : " + jsonObject.toString());
 
+            HashMap<String, JSONObject> map = new HashMap<>();
+
+            JSONArray jsonArray = jsonObject.getJSONArray("trackings");
+            for(int ii = 0; ii < jsonArray.length(); ii++) {
+                JSONObject tracking = jsonArray.getJSONObject(ii);
+
+                String username = tracking.getString("username");
+                map.put(username, tracking);
+            }
+
+            ArrayList<Member> members = getMember();
+            String trackings = "false";
+            for(int ii = 0; ii < members.size(); ii++) {
+                Member member = members.get(ii);
+                if(map.containsKey(member.getName())) {
+                    JSONObject trackingJSON = map.get(member.getName());
+
+                    JSONObject locationJSON = trackingJSON.getJSONObject("location");
+                    String lat = locationJSON.getString("lat");
+                    String lng = locationJSON.getString("long");
+                    String position = locationJSON.getString("name");
+
+                    member.setLat(Double.parseDouble(lat));
+                    member.setLng(Double.parseDouble(lng));
+                    member.setPosition(position);
+
+                    member.setStatus("trackings");
+
+                    trackings = "true";
+                }
+            }
+
+            JSONArray membersNew = new JSONArray();
+            for(int ii = 0; ii < members.size(); ii++) {
+                try {
+                    JSONObject memberNew = new JSONObject();
+
+                    memberNew.put("pp", members.get(ii).getPp());
+                    memberNew.put("name", members.get(ii).getName());
+                    memberNew.put("status", members.get(ii).getStatus());
+                    memberNew.put("lat", members.get(ii).getLat());
+                    memberNew.put("lng", members.get(ii).getLng());
+                    memberNew.put("position", members.get(ii).getPosition());
+
+                    membersNew.put(memberNew);
+                } catch (JSONException e) {
+                    Log.d(tag, e.getMessage());
+                }
+            }
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(context.getResources().getString(R.string.preferences_trackings), trackings);
+            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
+            editor.commit();
+
+            if(trackings.equals("true")) {
+                // do scheduling pull location from server + show in map
+                Log.d(tag, "setTrackings : SCHEDULING PULL LAT-LNG FROM SERVER + SHOW IN MAP");
+            }
+        } catch (JSONException e) {
+            Log.d(tag, e.getMessage());
+        }
     }
 
     public void notifications(String username) {
