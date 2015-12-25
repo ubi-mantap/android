@@ -31,7 +31,7 @@
         android:focusableInTouchMode="true">
 
         <EditText
-            android:id="@+id/from"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:textColor="#373535"
@@ -46,7 +46,7 @@
        </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/field_pass"
+        android:id="@+id/field_phone"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:layout_below="@+id/field_username"
@@ -57,23 +57,23 @@
         android:focusableInTouchMode="true">
 
         <EditText
-            android:id="@+id/to"
+            android:id="@+id/phone"
             android:layout_width="match_parent"
             android:layout_height="33dp"
             android:textColor="#373535"
             android:textColorHint="#cfcdcd"
             android:textColorLink="#373535"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:layout_centerInParent="true"
             android:gravity="start"
             android:textSize="7pt"
-            android:hint="Password"
+            android:hint="Phone"
             android:layout_marginLeft="5dp"/>
     </RelativeLayout>
 
     <Button
         android:id="@+id/btlogin"
-        android:layout_below="@+id/field_pass"
+        android:layout_below="@+id/field_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
