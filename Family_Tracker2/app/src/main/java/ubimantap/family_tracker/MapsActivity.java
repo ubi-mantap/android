@@ -32,13 +32,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ubimantap.family_tracker.functions.Functions;
 import ubimantap.family_tracker.receivers.ApplicationsReceiver;
+import ubimantap.family_tracker.tasks.RegisterTask;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private String tag = "MapsActivity";
     private String username = "";
     private String phone = "";
-
-    Context context;
 
     int TITLES[] = {R.string.tracker_map, R.string.member, R.string.member};
     int ICONS[] = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
@@ -110,10 +109,23 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         googleMap.moveCamera(center);
         googleMap.animateCamera(zoom);
 
-        this.username = "Dummy";
-        this.phone = "000000000000";
-        new Functions(this).register("Dummy", "000000000000");
-        scheduleNotification("NOTIFICATIONS", 5 * 1000);
+        // it should be in LoginActivity
+        new Functions(this).register("Kamila", "081385935613");
+
+        setMember();
+        Log.d(tag, "this.username = " + this.username);
+        scheduleNotification("NOTIFICATIONS", 10 * 1000);
+    }
+
+    public void setMember() {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences_key), MODE_PRIVATE);
+
+        this.username = sharedPreferences.getString(getString(R.string.preferences_username), "");
+        this.phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
+
+        if(this.username == "" || this.phone == "") {
+            Log.e(tag, "[error] need register member first!");
+        }
     }
 
     /*
@@ -225,7 +237,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     public void setTitle(int txt, int img) {
         imgAction.setImageResource(img);
         textAction.setText(txt);
-
     }
 
     public void scheduleNotification(String action, int delay) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import ubimantap.family_tracker.R;
 import ubimantap.family_tracker.functions.Functions;
 
 public class ApplicationsReceiver extends BroadcastReceiver {
@@ -14,6 +15,7 @@ public class ApplicationsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         String username = intent.getStringExtra("username");
+        String phone = intent.getStringExtra("phone");
 
         switch (action) {
             case "NOTIFICATIONS" :

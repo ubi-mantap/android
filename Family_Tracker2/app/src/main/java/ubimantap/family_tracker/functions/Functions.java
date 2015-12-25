@@ -64,6 +64,6 @@ public class Functions {
 
     public void notifications(String username) {
         Log.d(tag, "notificationsTask : " + username);
-        new NotificationsTask().execute(username);
+        new NotificationsTask(context).execute(username);
     }
 }
