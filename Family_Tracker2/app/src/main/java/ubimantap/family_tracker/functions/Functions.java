@@ -60,6 +60,7 @@ public class Functions {
         return new Owner(username, phone);
     }
 
+    /*
     public void setMember(String username, String phone) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
@@ -72,7 +73,7 @@ public class Functions {
         members.add(new Member(0, "Bobby", "", 0, 0, ""));
         members.add(new Member(0, "Mukhlis", "", 0, 0, ""));
         members.add(new Member(0, "Eteng", "", 0, 0, ""));
-        members.remove(username);
+        members.remove(username);*
 
         JSONArray jsonArray = new JSONArray();
         for(int ii = 0; ii < members.size(); ii++) {
@@ -94,7 +95,7 @@ public class Functions {
 
         editor.putString("member", jsonArray.toString());
         editor.commit();
-    }
+    }*/
 
     public ArrayList<Member> getMember() {
         ArrayList<Member> members = new ArrayList<>();
@@ -111,9 +112,9 @@ public class Functions {
                 double lat = jsonObject.getDouble("lat");
                 double lng = jsonObject.getDouble("lng");
                 String position = jsonObject.getString("position");
-                Member member = new Member(pp, name, status, lat, lng, position);
+                //Member member = new Member(pp, name, status, lat, lng, position);
 
-                members.add(member);
+                //members.add(member);
             }
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
