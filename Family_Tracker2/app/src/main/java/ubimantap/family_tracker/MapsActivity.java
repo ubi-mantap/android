@@ -31,17 +31,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import ubimantap.family_tracker.functions.Functions;
+import ubimantap.family_tracker.objects.Owner;
 import ubimantap.family_tracker.receivers.ApplicationsReceiver;
 import ubimantap.family_tracker.tasks.RegisterTask;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private String tag = "MapsActivity";
-    private String username = "";
-    private String phone = "";
+    private Owner owner;
 
     int TITLES[] = {R.string.tracker_map, R.string.member, R.string.member};
     int ICONS[] = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
-    int HEADER[] = {R.drawable.ic_launcher,R.drawable.ic_launcher, R.drawable.ic_launcher};
+    int HEADER[] = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
     String NAME = "Family Tracker";
     int PROFILE = R.drawable.ic_launcher;
 
@@ -109,24 +109,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         googleMap.moveCamera(center);
         googleMap.animateCamera(zoom);
 
-        // it should be in LoginActivity
-        new Functions(this).register("Kamila", "081385935613");
-        //new Functions(this).register("Bobby", "089688157020");
-
-        setMember();
-        Log.d(tag, "this.username = " + this.username);
-        scheduleNotification("NOTIFICATIONS", 10 * 1000);
-    }
-
-    public void setMember() {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preferences_key), MODE_PRIVATE);
-
-        this.username = sharedPreferences.getString(getString(R.string.preferences_username), "");
-        this.phone = sharedPreferences.getString(getString(R.string.preferences_phone), "");
-
-        if(this.username == "" || this.phone == "") {
-            Log.e(tag, "[error] need register member first!");
-        }
+        owner = new Functions(this).getOwner();
+        //scheduleNotification("NOTIFICATIONS", 10 * 1000);
     }
 
     /*
@@ -245,10 +229,10 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
         Intent intent = new Intent(this, ApplicationsReceiver.class);
         intent.setAction(action);
-        intent.putExtra("username", this.username);
-        intent.putExtra("phone", this.phone);
+        intent.putExtra("username", this.owner.getUsername());
+        intent.putExtra("phone", this.owner.getPhone());
 
-        Log.d(tag, this.username + " [" + this.phone + "]");
+        Log.d(tag, this.owner.getUsername() + " [" + this.owner.getPhone() + "]");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
