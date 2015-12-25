@@ -18,29 +18,55 @@ public class NotificationsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
+        String phone = "";
+        String trackerUsername = "";
+        String trackedUsername = "";
+
         switch (action) {
             case "CALL" :
-                Log.d(tag, action);
+                phone = intent.getStringExtra("phone");
+                Log.d(tag, action + " :" + phone);
+
                 Intent callIntent = new Intent();
 
                 callIntent.setAction(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:081385935613"));
+                callIntent.setData(Uri.parse("tel:" + phone));
                 callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(callIntent);
 
                 break;
             case "SMS" :
-                Log.d(tag, action);
-                break;
-            case "AGREE" :
-                Log.d(tag, action);
-                break;
-            case "DISAGREE" :
-                Log.d(tag, action);
+                phone = intent.getStringExtra("phone");
+                Log.d(tag, action + " :" + phone);
+
+                Intent smsIntent = new Intent();
+
+                smsIntent.setAction(Intent.ACTION_VIEW);
+                smsIntent.setData(Uri.parse("sms:" + phone));
+                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(smsIntent);
+
                 break;
             case "IGNORE" :
                 Log.d(tag, action);
+                break;
+            case "AGREE" :
+                trackerUsername = intent.getStringExtra("trackerUsername");
+                trackedUsername = intent.getStringExtra("trackedUsername");
+                Log.d(tag, action + trackerUsername + " -> " + trackedUsername);
+
+                new Functions(context).trackingsStart(trackerUsername, trackedUsername, "true");
+
+                break;
+            case "DISAGREE" :
+                trackerUsername = intent.getStringExtra("trackerUsername");
+                trackedUsername = intent.getStringExtra("trackedUsername");
+                Log.d(tag, action + trackerUsername + " -> " + trackedUsername);
+
+                new Functions(context).trackingsStart(trackerUsername, trackedUsername, "false");
+
                 break;
             default :
                 break;
