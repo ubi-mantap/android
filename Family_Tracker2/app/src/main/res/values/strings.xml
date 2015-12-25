@@ -12,8 +12,6 @@
     <string name="preferences_username">username</string>
     <string name="preferences_phone">phone</string>
     <string name="preferences_member">member</string>
-    <string name="preferences_trackers">trackers</string>
-    <string name="preferences_trackings">trackings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

@@ -1,10 +1,13 @@
 package ubimantap.family_tracker.objects;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.content.Context;
 =======
 >>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
 import android.util.Log;
+=======
+>>>>>>> parent of 370a60d... location flow
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +32,6 @@ public class Member extends BaseAdapter implements View.OnClickListener {
     private ArrayList<String> position;
 =======
 public class Member {
-    private String tag = "Member";
-
     private int pp;
     private String name;
     private String status;
@@ -81,7 +82,6 @@ public class Member {
 =======
     @Override
     public boolean equals(Object object) {
-        Log.d(tag, "EQUALS");
         if(object == null) return false;
         if(object == this) return true;
 

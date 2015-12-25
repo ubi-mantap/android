@@ -53,7 +53,11 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
         lng.add(1.2);
 =======
         members = new Functions(this.context).getMember();
+<<<<<<< HEAD
 >>>>>>> 370a60d233d2a295b85433bc45ac0810104903bd
+=======
+        Log.d(tag, members.size() + "");
+>>>>>>> parent of 370a60d... location flow
 
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
         memberlistView = (ListView) rootView.findViewById(R.id.list_member);
