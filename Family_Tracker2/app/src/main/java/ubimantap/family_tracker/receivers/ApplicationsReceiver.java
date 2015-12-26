@@ -21,6 +21,8 @@ public class ApplicationsReceiver extends BroadcastReceiver {
             case "NOTIFICATIONS" :
                 Log.d(tag, "NOTIFICATIONS : " + username);
                 new Functions(context).notifications(username);
+                new Functions(context).tracks(username);
+                new Functions(context).mapTracks(username);
                 break;
             case "TRACKS" :
                 Log.d(tag, "TRACKS : " + username);

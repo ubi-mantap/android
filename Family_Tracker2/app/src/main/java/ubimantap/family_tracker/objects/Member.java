@@ -99,6 +99,6 @@ public class Member {
 
     @Override
     public String toString() {
-        return getName();
+        return getName() + " [" + getTracker() + ", " + getTracking() + "] in " + getPosition() + " (" + getLat() + ", " + getLng() + ")";
     }
 }

@@ -13,8 +13,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ubimantap.family_tracker.R;
+import ubimantap.family_tracker.functions.Functions;
+import ubimantap.family_tracker.objects.Owner;
 
 public class TrackerMemberAdapter extends BaseAdapter implements View.OnClickListener {
+    private String tag = "TrackerMemberAdapater";
 
     private Context context;
     private ArrayList<Integer> pp;
@@ -27,8 +30,8 @@ public class TrackerMemberAdapter extends BaseAdapter implements View.OnClickLis
     TextView nameView;
     TextView positionView;
     ImageView ppView;
-    Button bt_stop;
-    Button bt_track;
+    Button btActive;
+    Button btPassive;
 
     public TrackerMemberAdapter(Context context, ArrayList<Integer> pp, ArrayList<String> name, ArrayList<String> status, ArrayList<Double> lat, ArrayList<Double> lng, ArrayList<String> position) {
         this.context = context;
@@ -65,24 +68,26 @@ public class TrackerMemberAdapter extends BaseAdapter implements View.OnClickLis
 
     @Override
     public View getView(int viewType, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_member, parent, false);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tracker_item_member, parent, false);
         nameView = (TextView) convertView.findViewById(R.id.nameText);
         positionView = (TextView) convertView.findViewById(R.id.positionText);
-        bt_track = (Button) convertView.findViewById(R.id.btTrack);
-        bt_stop = (Button) convertView.findViewById(R.id.btStop);
+        btActive = (Button) convertView.findViewById(R.id.btActive);
+        btPassive = (Button) convertView.findViewById(R.id.btPassive);
 
         if (status.get(viewType).equals("true")){
-            bt_track.setVisibility(View.INVISIBLE);
-            bt_stop.setVisibility(View.VISIBLE);
+            btActive.setVisibility(View.VISIBLE);
+            btPassive.setVisibility(View.INVISIBLE);
+
         }
         else {
-            bt_stop.setVisibility(View.INVISIBLE);
-            bt_track.setVisibility(View.VISIBLE);
+            btPassive.setVisibility(View.VISIBLE);
+            btActive.setVisibility(View.INVISIBLE);
         }
-        bt_track.setTag(viewType);
-        bt_stop.setTag(viewType);
-        bt_track.setOnClickListener(this);
-        bt_stop.setOnClickListener(this);
+
+        btActive.setTag(viewType);
+        btPassive.setTag(viewType);
+
+        btActive.setOnClickListener(this);
 
         ppView = (ImageView) convertView.findViewById(R.id.profpicnya);
         nameView.setText(name.get(viewType));
@@ -94,21 +99,11 @@ public class TrackerMemberAdapter extends BaseAdapter implements View.OnClickLis
     @Override
     public void onClick(View view) {
         Integer positionItem = (Integer) view.getTag();
-        switch(view.getId()) {
-            case R.id.btTrack:
-                status.set(positionItem, "true");
-                bt_track.setVisibility(View.INVISIBLE);
-                bt_stop.setVisibility(View.VISIBLE);
-                notifyDataSetChanged();
-                Log.d("track : ", positionItem.toString());
-                break;
-            case R.id.btStop:
-                status.set(positionItem, "false");
-                bt_stop.setVisibility(View.INVISIBLE);
-                bt_track.setVisibility(View.VISIBLE);
-                notifyDataSetChanged();
-                Log.d("stop : ", positionItem.toString());
-                break;
-        }
+
+        notifyDataSetChanged();
+        Log.d(tag, "TRACKINGS/STOP");
+
+        Owner owner = new Functions(context).getOwner();
+        new Functions(context).trackingsStop(name.get(positionItem), owner.getUsername());
     }
 }

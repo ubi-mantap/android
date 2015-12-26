@@ -14,16 +14,23 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 import ubimantap.family_tracker.functions.Functions;
+import ubimantap.family_tracker.objects.Member;
 
 public class TrackingsTask extends AsyncTask<String, Void, String> {
     private String tag = "TrackingsTask";
     private String endpoint = "https://family-tracker.herokuapp.com/trackings?username=";
+    private Context context;
+
+    public TrackingsTask(Context context) {
+        this.context = context;
+    }
 
     @Override
     protected String doInBackground(String... strings) {
@@ -61,6 +68,27 @@ public class TrackingsTask extends AsyncTask<String, Void, String> {
             JSONObject jsonObject = new JSONObject(result);
             if(jsonObject.getString("ok").equals("true")) {
                 Log.d(tag, "SUCCESS");
+                JSONArray jsonArray = jsonObject.getJSONArray("trackings");
+
+                for(int ii = 0; ii < jsonArray.length(); ii++) {
+                    JSONObject tracking = jsonArray.getJSONObject(ii);
+
+                    Log.d(tag, "username :" + tracking.getString("username"));
+                    Log.d(tag, "location :" + tracking.has("location"));
+
+                    String username = tracking.getString("username");
+                    if(tracking.has("location")) {
+                        JSONObject location = tracking.getJSONObject("location");
+
+                        double lat = location.getDouble("lat");
+                        double lng = location.getDouble("long");
+                        String position = location.getString("name");
+
+                        Member member = new Member(0, username, "false", "false", lat, lng, position);
+
+                        new Functions(context).updateMember("location", member);
+                    }
+                }
             }
             else {
                 Log.d(tag, "FAILED");

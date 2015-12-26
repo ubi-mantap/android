@@ -21,6 +21,7 @@ import ubimantap.family_tracker.tasks.TrackingsInitTask;
 import ubimantap.family_tracker.tasks.TrackingsLogTask;
 import ubimantap.family_tracker.tasks.TrackingsStartTask;
 import ubimantap.family_tracker.tasks.TrackingsStopTask;
+import ubimantap.family_tracker.tasks.TrackingsTask;
 import ubimantap.family_tracker.tasks.TracksTask;
 
 public class Functions {
@@ -62,14 +63,19 @@ public class Functions {
     }
 
     public void setMember(String username) {
+        String dummy = "";
+        if(username.length() > "Dummy".length() && username.substring(username.length() - "Dummy".length()).equals("Dummy")) {
+            dummy = "Dummy";
+        }
+
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
         ArrayList<String> usernames = new ArrayList<>();
-        usernames.add("Kamila");
-        usernames.add("Tyas");
-        usernames.add("Bobby");
-        usernames.add("Mukhlis");
-        usernames.add("Eteng");
+        usernames.add("Kamila" + dummy);
+        usernames.add("Tyas" + dummy);
+        usernames.add("Bobby" + dummy);
+        usernames.add("Mukhlis" + dummy);
+        usernames.add("Eteng" + dummy);
         Log.d(tag, "remove :" + username);
         usernames.remove(username);
 
@@ -105,13 +111,11 @@ public class Functions {
     }
 
     public ArrayList<Member> getMember() {
-        Log.d(tag, "in getMember");
         ArrayList<Member> members = new ArrayList<>();
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(this.context.getString(R.string.preferences_key), this.context.MODE_PRIVATE);
 
         try {
             JSONArray jsonArray = new JSONArray(sharedPreferences.getString("member", ""));
-            Log.d(tag, jsonArray.toString());
             for(int ii = 0; ii < jsonArray.length(); ii++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(ii);
 
@@ -134,8 +138,21 @@ public class Functions {
         return members;
     }
 
-    public void updateMemberStatus(String username, String status) {
-
+    public void updateMember(String action, Member member) {
+        switch(action) {
+            case "trackers" :
+                Log.d(tag, "update trackers");
+                break;
+            case "trackings" :
+                Log.d(tag, "update trackings");
+                break;
+            case "location" :
+                Log.d(tag, "update locations");
+                Log.d(tag, "member :" + member.toString());
+                break;
+            default :
+                break;
+        }
     }
 
     public void debugMember() {
@@ -144,23 +161,51 @@ public class Functions {
     }
 
     public void trackingsInit(String trackerUsername, String trackedUsername) {
-        Log.d(tag, "trackingsInit : " + trackedUsername + " -> " + trackedUsername);
+        Log.d(tag, "trackingsInit : " + trackerUsername + " -> " + trackedUsername);
         new TrackingsInitTask().execute(trackerUsername, trackedUsername);
     }
 
     public void trackingsStart(String trackerUsername, String trackedUsername, String status) {
-        Log.d(tag, "trackingsStartTask : " + trackedUsername + " -> " + trackedUsername + " (" + status + ")");
+        Log.d(tag, "trackingsStartTask : " + trackerUsername + " -> " + trackedUsername + " (" + status + ")");
         new TrackingsStartTask().execute(trackerUsername, trackedUsername, status);
     }
 
     public void trackingsStop(String trackerUsername, String trackedUsername) {
-        Log.d(tag, "trackingsStopTask : " + trackedUsername + " -> " + trackedUsername);
+        Log.d(tag, "trackingsStopTask : " + trackerUsername + " -> " + trackedUsername);
         new TrackingsStopTask().execute(trackerUsername, trackedUsername);
     }
 
     public void trackingsLog(String username, String lat, String lng) {
         Log.d(tag, "trackingsLog : " + username + " [" + lat + ", " + lng + "]");
         new TrackingsLogTask().execute(username, lat, lng);
+    }
+
+    public void trackings(String username) {
+        Log.d(tag, "trackings : " + username);
+        new TrackingsTask(context).execute(username);
+    }
+
+    public void mapTracks(String username) {
+        Owner owner = getOwner();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+
+        String trackers = sharedPreferences.getString("trackers", "");
+        String trackings = sharedPreferences.getString("trackings", "");
+
+        if(trackers.equals("true")) {
+            //do get lat-lng
+            double lat = 0;
+            double lng = 0;
+
+            Log.d(tag, "SEND : " + owner.getUsername() + " [" + lat + ", " + lng + "]");
+            // trackingsLog(username, lat, lng);
+        }
+
+        if(trackings.equals("true")) {
+            Log.d(tag, "GET : " + owner.getUsername());
+            trackings(username);
+        }
     }
 
     public void tracks(String username) {
@@ -217,28 +262,67 @@ public class Functions {
             editor.putString(context.getResources().getString(R.string.preferences_trackers), trackers);
             editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
             editor.commit();
-
-            if(trackers.equals("true")) {
-                //do scheduling push location to server
-                Log.d(tag, "setTrackers : SCHEDULING PUSH LAT-LNG TO SERVER");
-                scheduleTrackers();
-            }
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
         }
     }
 
-    public void scheduleTrackers() {
-        Owner owner = getOwner();
+    public void setTrackings(JSONObject jsonObject) {
+        try {
+            Log.d(tag, "setTrackings : " + jsonObject.toString());
+            HashSet<String> set = new HashSet<>();
 
-        double lat = 0;
-        double lng = 0;
+            JSONArray jsonArray = jsonObject.getJSONArray("trackings");
+            for(int ii = 0; ii < jsonArray.length(); ii++) {
+                JSONObject tracking = jsonArray.getJSONObject(ii);
+                set.add(tracking.getString("username"));
+            }
 
-        Log.d(tag, "schedule : " + lat + ", " + lng);
-        //trackingsLog(owner.getUsername(), "" + lat, "" + lng);
+            String trackings = "false";
+            ArrayList<Member> members = getMember();
+            for(int ii = 0; ii < members.size(); ii++) {
+                Member member = members.get(ii);
+                if(set.contains(member.getName())) {
+                    member.setTracking("true");
+                    trackings = "true";
+                }
+                else {
+                    member.setTracking("false");
+                }
+                members.set(ii, member);
+            }
+
+            JSONArray membersNew = new JSONArray();
+            for(int ii = 0; ii < members.size(); ii++) {
+                try {
+                    JSONObject memberNew = new JSONObject();
+
+                    memberNew.put("pp", members.get(ii).getPp());
+                    memberNew.put("name", members.get(ii).getName());
+                    memberNew.put("tracker", members.get(ii).getTracker());
+                    memberNew.put("tracking", members.get(ii).getTracking());
+                    memberNew.put("lat", members.get(ii).getLat());
+                    memberNew.put("lng", members.get(ii).getLng());
+                    memberNew.put("position", members.get(ii).getPosition());
+
+                    membersNew.put(memberNew);
+                } catch (JSONException e) {
+                    Log.d(tag, e.getMessage());
+                }
+            }
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(context.getResources().getString(R.string.preferences_trackings), trackings);
+            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
+            editor.commit();
+        } catch (JSONException e) {
+            Log.d(tag, e.getMessage());
+        }
     }
 
-    public void setTrackings(JSONObject jsonObject) {
+    /*public void setTrackings(JSONObject jsonObject) {
         try {
             Log.d(tag, "setTrackings : " + jsonObject.toString());
 
@@ -310,7 +394,7 @@ public class Functions {
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
         }
-    }
+    }*/
 
     public void notifications(String username) {
         Log.d(tag, "notificationsTask : " + username);

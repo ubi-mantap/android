@@ -104,7 +104,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         googleMap.animateCamera(zoom);
 
         owner = new Functions(this).getOwner();
-        //scheduleNotification("NOTIFICATIONS", 10 * 1000);
+        scheduleNotification("NOTIFICATIONS", 15 * 1000);
         //scheduleNotification("TRACKS", 5 * 60 * 1000);
     }
 
@@ -172,10 +172,10 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                 startActivity(i);
                 break;
             case 2:
-                fragment = new TrackerMemberFragment();
+                fragment = new TrackingMemberFragment();
                 break;
             case 3:
-                fragment = new TrackingMemberFragment();
+                fragment = new TrackerMemberFragment();
                 break;
             default:
                 break;
