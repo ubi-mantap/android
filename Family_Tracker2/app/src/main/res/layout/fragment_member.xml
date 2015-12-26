@@ -3,13 +3,13 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#FEE9DA">
 
     <ListView
         android:id="@+id/list_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ini halaman Member Ubi"
-        android:background="#ffffff"
+        android:background="#FEE9DA"
         android:layout_marginTop="3dp"/>
 </LinearLayout>

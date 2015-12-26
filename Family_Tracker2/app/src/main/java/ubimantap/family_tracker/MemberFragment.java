@@ -38,8 +38,8 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
         //members = new Functions(this.context).getMember();
         //Log.d(tag, members.size() + "");
 
-        pp.add(R.drawable.ic_launcher);
-        pp.add(R.drawable.ic_launcher);
+        pp.add(R.drawable.ic_person);
+        pp.add(R.drawable.ic_person);
         name.add("tyas");
         name.add("kamila");
         status.add("no track");

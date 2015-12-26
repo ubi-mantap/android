@@ -4,8 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -33,17 +31,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ubimantap.family_tracker.functions.Functions;
 import ubimantap.family_tracker.objects.Owner;
 import ubimantap.family_tracker.receivers.ApplicationsReceiver;
-import ubimantap.family_tracker.tasks.RegisterTask;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener, View.OnClickListener, AdapterView.OnItemClickListener {
     private String tag = "MapsActivity";
     private Owner owner;
 
     int TITLES[] = {R.string.tracker_map, R.string.member, R.string.member};
-    int ICONS[] = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
-    int HEADER[] = {R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher};
+    int ICONS[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_launcher};
+    int HEADER[] = {R.drawable.ic_track, R.drawable.ic_track, R.drawable.ic_track};
     String NAME = "Family Tracker";
-    int PROFILE = R.drawable.ic_launcher;
+    int PROFILE = R.drawable.ic_track;
 
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
