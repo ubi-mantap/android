@@ -18,6 +18,7 @@ import ubimantap.family_tracker.objects.Owner;
 import ubimantap.family_tracker.tasks.NotificationsTask;
 import ubimantap.family_tracker.tasks.RegisterTask;
 import ubimantap.family_tracker.tasks.TrackingsInitTask;
+import ubimantap.family_tracker.tasks.TrackingsLogTask;
 import ubimantap.family_tracker.tasks.TrackingsStartTask;
 import ubimantap.family_tracker.tasks.TrackingsStopTask;
 import ubimantap.family_tracker.tasks.TracksTask;
@@ -74,7 +75,7 @@ public class Functions {
 
         ArrayList<Member> members = new ArrayList<>();
         for(int ii = 0; ii < usernames.size(); ii++) {
-           members.add(new Member(0, usernames.get(ii), "false", "false", 0, 0, ""));
+           members.add(new Member(R.drawable.ic_person, usernames.get(ii), "false", "false", 0, 0, ""));
         }
 
         JSONArray jsonArray = new JSONArray();
@@ -157,6 +158,11 @@ public class Functions {
         new TrackingsStopTask().execute(trackerUsername, trackedUsername);
     }
 
+    public void trackingsLog(String username, String lat, String lng) {
+        Log.d(tag, "trackingsLog : " + username + " [" + lat + ", " + lng + "]");
+        new TrackingsLogTask().execute(username, lat, lng);
+    }
+
     public void tracks(String username) {
        new TracksTask(context).execute(username);
     }
@@ -215,10 +221,21 @@ public class Functions {
             if(trackers.equals("true")) {
                 //do scheduling push location to server
                 Log.d(tag, "setTrackers : SCHEDULING PUSH LAT-LNG TO SERVER");
+                scheduleTrackers();
             }
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
         }
+    }
+
+    public void scheduleTrackers() {
+        Owner owner = getOwner();
+
+        double lat = 0;
+        double lng = 0;
+
+        Log.d(tag, "schedule : " + lat + ", " + lng);
+        //trackingsLog(owner.getUsername(), "" + lat, "" + lng);
     }
 
     public void setTrackings(JSONObject jsonObject) {

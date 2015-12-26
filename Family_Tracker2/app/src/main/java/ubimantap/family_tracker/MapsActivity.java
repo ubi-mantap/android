@@ -36,9 +36,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     private String tag = "MapsActivity";
     private Owner owner;
 
-    int TITLES[] = {R.string.tracker_map, R.string.member, R.string.member};
-    int ICONS[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_launcher};
-    int HEADER[] = {R.drawable.ic_track, R.drawable.ic_track, R.drawable.ic_track};
+    int TITLES[] = {R.string.tracker_map, R.string.tracking_member, R.string.tracker_member,R.string.tracker_member};
+    int ICONS[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member};
+    int HEADER[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member };
     String NAME = "Family Tracker";
     int PROFILE = R.drawable.ic_track;
 
@@ -172,7 +172,10 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                 startActivity(i);
                 break;
             case 2:
-                fragment = new MemberFragment();
+                fragment = new TrackerMemberFragment();
+                break;
+            case 3:
+                fragment = new TrackingMemberFragment();
                 break;
             default:
                 break;

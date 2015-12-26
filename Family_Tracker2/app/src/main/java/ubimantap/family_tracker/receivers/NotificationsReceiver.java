@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import ubimantap.family_tracker.MapsActivity;
-import ubimantap.family_tracker.MemberFragment;
+import ubimantap.family_tracker.TrackerMemberFragment;
 import ubimantap.family_tracker.functions.Functions;
 
 public class NotificationsReceiver extends BroadcastReceiver {
