@@ -12,6 +12,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ubimantap.family_tracker.adapters.MemberAdapter;
+import ubimantap.family_tracker.functions.Functions;
 import ubimantap.family_tracker.objects.Member;
 
 public class MemberFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -26,7 +28,7 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
     ArrayList<Double> lat = new ArrayList<Double>();
     ArrayList<Double> lng = new ArrayList<Double>();
 
-    Member memberAdapter;
+    MemberAdapter memberAdapter;
     int posisinya;
 
     ListView memberlistView;
@@ -35,25 +37,21 @@ public class MemberFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.context = getActivity().getApplicationContext();
-        //members = new Functions(this.context).getMember();
-        //Log.d(tag, members.size() + "");
+        members = new Functions(this.context).getMember();
 
-        pp.add(R.drawable.ic_person);
-        pp.add(R.drawable.ic_person);
-        name.add("tyas");
-        name.add("kamila");
-        status.add("no track");
-        status.add("track");
-        position.add("UI");
-        position.add("Bogor");
-        lat.add(0.1);
-        lat.add(1.2);
-        lng.add(0.3);
-        lng.add(1.2);
+        for(int ii = 0; ii < members.size(); ii++) {
+            Member member = members.get(ii);
+            pp.add(member.getPp());
+            name.add(member.getName());
+            //status.add(member.getStatus());
+            lat.add(member.getLat());
+            lng.add(member.getLng());
+            position.add(member.getPosition());
+        }
 
         View rootView = inflater.inflate(R.layout.fragment_member, container, false);
         memberlistView = (ListView) rootView.findViewById(R.id.list_member);
-        memberAdapter = new Member(this.context, pp, name, status, lat, lng, position);
+        memberAdapter = new MemberAdapter(this.context, pp, name, status, lat, lng, position);
         memberlistView.setAdapter(memberAdapter);
         //memberlistView.setOnItemClickListener(this);
 

@@ -20,6 +20,7 @@ import ubimantap.family_tracker.tasks.RegisterTask;
 import ubimantap.family_tracker.tasks.TrackingsInitTask;
 import ubimantap.family_tracker.tasks.TrackingsStartTask;
 import ubimantap.family_tracker.tasks.TrackingsStopTask;
+import ubimantap.family_tracker.tasks.TracksTask;
 
 public class Functions {
     private String tag = "Functions";
@@ -59,7 +60,7 @@ public class Functions {
         return new Owner(username, phone);
     }
 
-    /*public void setMember(String username) {
+    public void setMember(String username) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
         ArrayList<String> usernames = new ArrayList<>();
@@ -73,7 +74,7 @@ public class Functions {
 
         ArrayList<Member> members = new ArrayList<>();
         for(int ii = 0; ii < usernames.size(); ii++) {
-           // members.add(new Member(0, usernames.get(ii), "", 0, 0, ""));
+           members.add(new Member(0, usernames.get(ii), "false", "false", 0, 0, ""));
         }
 
         JSONArray jsonArray = new JSONArray();
@@ -83,7 +84,8 @@ public class Functions {
 
                 jsonObject.put("pp", members.get(ii).getPp());
                 jsonObject.put("name", members.get(ii).getName());
-                jsonObject.put("status", members.get(ii).getStatus());
+                jsonObject.put("tracker", members.get(ii).getTracker());
+                jsonObject.put("tracking", members.get(ii).getTracking());
                 jsonObject.put("lat", members.get(ii).getLat());
                 jsonObject.put("lng", members.get(ii).getLng());
                 jsonObject.put("position", members.get(ii).getPosition());
@@ -100,7 +102,6 @@ public class Functions {
 
         Log.d(tag, "setMember : done set member");
     }
-    */
 
     public ArrayList<Member> getMember() {
         Log.d(tag, "in getMember");
@@ -115,14 +116,15 @@ public class Functions {
 
                 int pp = jsonObject.getInt("pp");
                 String name = jsonObject.getString("name");
-                String status = jsonObject.getString("status");
+                String tracker = jsonObject.getString("tracker");
+                String tracking = jsonObject.getString("tracking");
                 double lat = jsonObject.getDouble("lat");
                 double lng = jsonObject.getDouble("lng");
                 String position = jsonObject.getString("position");
 
-                //Member member = new Member(pp, name, status, lat, lng, position);
+                Member member = new Member(pp, name, tracker, tracking, lat, lng, position);
 
-                //members.add(member);
+                members.add(member);
             }
         } catch (JSONException e) {
             Log.d(tag, e.getMessage());
@@ -156,7 +158,7 @@ public class Functions {
     }
 
     public void tracks(String username) {
-       // new TracksTask(context).execute(username);
+       new TracksTask(context).execute(username);
     }
 
     public void setTrackers(JSONObject jsonObject) {
@@ -174,22 +176,25 @@ public class Functions {
             ArrayList<Member> members = getMember();
             for(int ii = 0; ii < members.size(); ii++) {
                 Member member = members.get(ii);
-                /*if(set.contains(member.getName())) {
-                    member.setStatus("trackers");
-                    members.set(ii, member);
-
+                if(set.contains(member.getName())) {
+                    member.setTracker("true");
                     trackers = "true";
-                }*/
+                }
+                else {
+                    member.setTracker("false");
+                }
+                members.set(ii, member);
             }
 
-            /*JSONArray membersNew = new JSONArray();
+            JSONArray membersNew = new JSONArray();
             for(int ii = 0; ii < members.size(); ii++) {
                 try {
                     JSONObject memberNew = new JSONObject();
 
                     memberNew.put("pp", members.get(ii).getPp());
                     memberNew.put("name", members.get(ii).getName());
-                    memberNew.put("status", members.get(ii).getStatus());
+                    memberNew.put("tracker", members.get(ii).getTracker());
+                    memberNew.put("tracking", members.get(ii).getTracking());
                     memberNew.put("lat", members.get(ii).getLat());
                     memberNew.put("lng", members.get(ii).getLng());
                     memberNew.put("position", members.get(ii).getPosition());
@@ -198,13 +203,13 @@ public class Functions {
                 } catch (JSONException e) {
                     Log.d(tag, e.getMessage());
                 }
-            } */
+            }
 
             SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(context.getResources().getString(R.string.preferences_trackers), trackers);
-            //editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
+            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
             editor.commit();
 
             if(trackers.equals("true")) {
@@ -225,15 +230,15 @@ public class Functions {
             JSONArray jsonArray = jsonObject.getJSONArray("trackings");
             for(int ii = 0; ii < jsonArray.length(); ii++) {
                 JSONObject tracking = jsonArray.getJSONObject(ii);
-
                 String username = tracking.getString("username");
                 map.put(username, tracking);
             }
 
             ArrayList<Member> members = getMember();
             String trackings = "false";
-            /*for(int ii = 0; ii < members.size(); ii++) {
+            for(int ii = 0; ii < members.size(); ii++) {
                 Member member = members.get(ii);
+
                 if(map.containsKey(member.getName())) {
                     JSONObject trackingJSON = map.get(member.getName());
 
@@ -246,10 +251,13 @@ public class Functions {
                     member.setLng(Double.parseDouble(lng));
                     member.setPosition(position);
 
-                    member.setStatus("trackings");
-
+                    member.setTracking("true");
                     trackings = "true";
                 }
+                else {
+                    member.setTracking("false");
+                }
+                members.set(ii, member);
             }
 
             JSONArray membersNew = new JSONArray();
@@ -259,7 +267,8 @@ public class Functions {
 
                     memberNew.put("pp", members.get(ii).getPp());
                     memberNew.put("name", members.get(ii).getName());
-                    memberNew.put("status", members.get(ii).getStatus());
+                    memberNew.put("tracker", members.get(ii).getTracker());
+                    memberNew.put("tracking", members.get(ii).getTracking());
                     memberNew.put("lat", members.get(ii).getLat());
                     memberNew.put("lng", members.get(ii).getLng());
                     memberNew.put("position", members.get(ii).getPosition());
@@ -269,13 +278,12 @@ public class Functions {
                     Log.d(tag, e.getMessage());
                 }
             }
-            */
 
             SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(context.getResources().getString(R.string.preferences_trackings), trackings);
-            //editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
+            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
             editor.commit();
 
             if(trackings.equals("true")) {

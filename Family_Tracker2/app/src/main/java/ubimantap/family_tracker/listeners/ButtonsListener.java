@@ -30,7 +30,7 @@ public class ButtonsListener implements View.OnClickListener {
 
         new Functions(this.context).login(username, phone);
         // new Functions(this.context).register(username, phone);
-        //new Functions(this.context).setMember(username);
+        new Functions(this.context).setMember(username);
 
         new Functions(this.context).tracks(username);
         new Functions(this.context).notifications(username);
