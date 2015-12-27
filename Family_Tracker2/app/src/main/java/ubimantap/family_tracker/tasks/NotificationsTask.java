@@ -128,7 +128,7 @@ public class NotificationsTask extends AsyncTask<String, Void, String> {
 
                 NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this.context)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(R.drawable.ic_track)
                         .setContentTitle(title)
                         .setContentText(message)
                         .setTicker(ticker);

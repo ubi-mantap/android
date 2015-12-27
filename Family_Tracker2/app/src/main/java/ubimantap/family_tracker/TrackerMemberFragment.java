@@ -42,12 +42,14 @@ public class TrackerMemberFragment extends Fragment{
         for(int ii = 0; ii < members.size(); ii++) {
             Member member = members.get(ii);
 
-            pp.add(member.getPp());
-            name.add(member.getName());
-            status.add(member.getTracker());
-            lat.add(member.getLat());
-            lng.add(member.getLng());
-            position.add(member.getPosition());
+            if(member.getTracker().equals("true")) {
+                pp.add(member.getPp());
+                name.add(member.getName());
+                status.add(member.getTracker());
+                lat.add(member.getLat());
+                lng.add(member.getLng());
+                position.add(member.getPosition());
+            }
         }
 
         View rootView = inflater.inflate(R.layout.fragment_tracker_member, container, false);
