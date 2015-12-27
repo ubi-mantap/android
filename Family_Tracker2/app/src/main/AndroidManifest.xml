@@ -24,10 +24,15 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--Kamila-->
+        <!--Release-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyATsduiGfZDJxihK54kPJl2hLs3RPqcwmg" />
+            android:value="AIzaSyCVgeziwxidEbhciFfBqEa7u6wrq5R5hIw" />
+
+        <!--Kamila-->
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyATsduiGfZDJxihK54kPJl2hLs3RPqcwmg" />-->
 
         <!--Tyas-->
         <!--<meta-data
