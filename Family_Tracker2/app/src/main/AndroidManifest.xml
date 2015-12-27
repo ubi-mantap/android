@@ -24,9 +24,15 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!--Kamila-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDdkoJL4A57q4fZv-lU1xP04j88_2uvuWU" />
+            android:value="AIzaSyATsduiGfZDJxihK54kPJl2hLs3RPqcwmg" />
+
+        <!--Tyas-->
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDdkoJL4A57q4fZv-lU1xP04j88_2uvuWU" />-->
 
         <activity
             android:name=".LoginActivity"

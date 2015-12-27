@@ -2,6 +2,9 @@ package ubimantap.family_tracker.functions;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -76,6 +79,8 @@ public class Functions {
         usernames.add("Bobby" + dummy);
         usernames.add("Mukhlis" + dummy);
         usernames.add("Eteng" + dummy);
+        usernames.add("Irvi" + dummy);
+
         Log.d(tag, "remove :" + username);
         usernames.remove(username);
 
@@ -139,19 +144,56 @@ public class Functions {
     }
 
     public void updateMember(String action, Member member) {
-        switch(action) {
-            case "trackers" :
-                Log.d(tag, "update trackers");
-                break;
-            case "trackings" :
-                Log.d(tag, "update trackings");
-                break;
-            case "location" :
-                Log.d(tag, "update locations");
-                Log.d(tag, "member :" + member.toString());
-                break;
-            default :
-                break;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String data = sharedPreferences.getString("member", "");
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+
+            for(int ii = 0; ii < jsonArray.length(); ii++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(ii);
+
+                String username = jsonObject.getString("name");
+                if(username.equals(member.getName())) {
+                    JSONObject newMember = new JSONObject();
+
+                    newMember.put("pp", jsonObject.getString("pp"));
+                    newMember.put("name", jsonObject.getString("name"));
+                    newMember.put("tracker", jsonObject.getString("tracker"));
+                    newMember.put("tracking", jsonObject.getString("tracking"));
+                    newMember.put("lat", jsonObject.getString("lat"));
+                    newMember.put("lat", jsonObject.getString("lng"));
+                    newMember.put("position", jsonObject.getString("position"));
+
+                    switch(action) {
+                        case "trackers" :
+                            Log.d(tag, "update trackers");
+                            break;
+                        case "trackings" :
+                            Log.d(tag, "update trackings");
+                            break;
+                        case "location" :
+                            Log.d(tag, "update locations");
+                            newMember.put("lat", member.getLat());
+                            newMember.put("lng", member.getLng());
+                            newMember.put("position", member.getPosition());
+                            Log.d(tag, "member :" + member.toString());
+                            break;
+                        default :
+                            break;
+                    }
+
+                    jsonArray.put(ii, newMember);
+                    break;
+                }
+            }
+
+            editor.putString("member", jsonArray.toString());
+            editor.commit();
+        }
+        catch (JSONException e) {
+            Log.e(tag, e.getMessage());
         }
     }
 
@@ -194,12 +236,17 @@ public class Functions {
         String trackings = sharedPreferences.getString("trackings", "");
 
         if(trackers.equals("true")) {
-            //do get lat-lng
-            double lat = 0;
-            double lng = 0;
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            String provider = locationManager.getBestProvider(new Criteria(), true);
+            Location location = locationManager.getLastKnownLocation(provider);
 
-            Log.d(tag, "SEND : " + owner.getUsername() + " [" + lat + ", " + lng + "]");
-            // trackingsLog(username, lat, lng);
+            if(location != null) {
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+
+                Log.d(tag, "SEND : " + owner.getUsername() + " [" + lat + ", " + lng + "]");
+                trackingsLog(owner.getUsername(), "" + lat, "" + lng);
+            }
         }
 
         if(trackings.equals("true")) {
@@ -322,82 +369,18 @@ public class Functions {
         }
     }
 
-    /*public void setTrackings(JSONObject jsonObject) {
-        try {
-            Log.d(tag, "setTrackings : " + jsonObject.toString());
-
-            HashMap<String, JSONObject> map = new HashMap<>();
-
-            JSONArray jsonArray = jsonObject.getJSONArray("trackings");
-            for(int ii = 0; ii < jsonArray.length(); ii++) {
-                JSONObject tracking = jsonArray.getJSONObject(ii);
-                String username = tracking.getString("username");
-                map.put(username, tracking);
-            }
-
-            ArrayList<Member> members = getMember();
-            String trackings = "false";
-            for(int ii = 0; ii < members.size(); ii++) {
-                Member member = members.get(ii);
-
-                if(map.containsKey(member.getName())) {
-                    JSONObject trackingJSON = map.get(member.getName());
-
-                    JSONObject locationJSON = trackingJSON.getJSONObject("location");
-                    String lat = locationJSON.getString("lat");
-                    String lng = locationJSON.getString("long");
-                    String position = locationJSON.getString("name");
-
-                    member.setLat(Double.parseDouble(lat));
-                    member.setLng(Double.parseDouble(lng));
-                    member.setPosition(position);
-
-                    member.setTracking("true");
-                    trackings = "true";
-                }
-                else {
-                    member.setTracking("false");
-                }
-                members.set(ii, member);
-            }
-
-            JSONArray membersNew = new JSONArray();
-            for(int ii = 0; ii < members.size(); ii++) {
-                try {
-                    JSONObject memberNew = new JSONObject();
-
-                    memberNew.put("pp", members.get(ii).getPp());
-                    memberNew.put("name", members.get(ii).getName());
-                    memberNew.put("tracker", members.get(ii).getTracker());
-                    memberNew.put("tracking", members.get(ii).getTracking());
-                    memberNew.put("lat", members.get(ii).getLat());
-                    memberNew.put("lng", members.get(ii).getLng());
-                    memberNew.put("position", members.get(ii).getPosition());
-
-                    membersNew.put(memberNew);
-                } catch (JSONException e) {
-                    Log.d(tag, e.getMessage());
-                }
-            }
-
-            SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferences_key), context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(context.getResources().getString(R.string.preferences_trackings), trackings);
-            editor.putString(context.getResources().getString(R.string.preferences_member), membersNew.toString());
-            editor.commit();
-
-            if(trackings.equals("true")) {
-                // do scheduling pull location from server + show in map
-                Log.d(tag, "setTrackings : SCHEDULING PULL LAT-LNG FROM SERVER + SHOW IN MAP");
-            }
-        } catch (JSONException e) {
-            Log.d(tag, e.getMessage());
-        }
-    }*/
-
     public void notifications(String username) {
         Log.d(tag, "notificationsTask : " + username);
         new NotificationsTask(context).execute(username);
+    }
+
+    public void debug(String username) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        String provider = locationManager.getBestProvider(new Criteria(), true);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if(location != null) {
+            Log.d(tag, "location :" + location);
+        }
     }
 }

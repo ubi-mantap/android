@@ -77,6 +77,7 @@ public class TrackingsTask extends AsyncTask<String, Void, String> {
                     Log.d(tag, "location :" + tracking.has("location"));
 
                     String username = tracking.getString("username");
+
                     if(tracking.has("location")) {
                         JSONObject location = tracking.getJSONObject("location");
 

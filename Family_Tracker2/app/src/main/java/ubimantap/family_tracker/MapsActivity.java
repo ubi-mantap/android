@@ -28,36 +28,38 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import ubimantap.family_tracker.functions.Functions;
+import ubimantap.family_tracker.objects.Member;
 import ubimantap.family_tracker.objects.Owner;
 import ubimantap.family_tracker.receivers.ApplicationsReceiver;
 
-public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener, View.OnClickListener, AdapterView.OnItemClickListener {
+public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener {
     private String tag = "MapsActivity";
     private Owner owner;
+    private ArrayList<Member> members;
 
-    int TITLES[] = {R.string.tracker_map, R.string.tracking_member, R.string.tracker_member,R.string.tracker_member};
-    int ICONS[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member};
-    int HEADER[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member };
-    String NAME = "Family Tracker";
-    int PROFILE = R.drawable.ic_track;
+    private int TITLES[] = {R.string.tracker_map, R.string.tracking_member, R.string.tracker_member,R.string.tracker_member};
+    private int ICONS[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member};
+    private int HEADER[] = {R.drawable.ic_marker, R.drawable.ic_member, R.drawable.ic_member, R.drawable.ic_member };
+    private String NAME = "Family Tracker";
+    private int PROFILE = R.drawable.ic_track;
 
-    DrawerLayout Drawer;
-    ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout Drawer;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     private Toolbar toolbar;
-    private RelativeLayout rl;
-    ListView mListView;
-    ListAdapter mAdapter;
+    private ListView mListView;
+    private ListAdapter mAdapter;
 
-    TextView textAction;
-    ImageView imgAction;
+    private TextView textAction;
+    private ImageView imgAction;
 
-    GoogleMap googleMap;
-    MarkerOptions markerOptions;
-    LatLng latLng;
-    MapFragment mapFragment;
-    private GoogleMap mMap;
+    private GoogleMap googleMap;
+    private MapFragment mapFragment;
+    private MarkerOptions markerOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +92,11 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         googleMap = mapFragment.getMap();
         googleMap.setMyLocationEnabled(true);
-        googleMap.setOnMapClickListener(this);
+
         googleMap.setOnMarkerClickListener(this);
-        googleMap.setOnInfoWindowClickListener(this);
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(-6.3994934, 106.8192634));
         CameraUpdate zoom =  CameraUpdateFactory.zoomTo(15);
@@ -104,8 +104,35 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         googleMap.animateCamera(zoom);
 
         owner = new Functions(this).getOwner();
-        scheduleNotification("NOTIFICATIONS", 15 * 1000);
-        //scheduleNotification("TRACKS", 5 * 60 * 1000);
+        members = new Functions(this).getMember();
+
+        scheduling("NOTIFICATIONS", 5 * 1000);
+        scheduling("TRACKS", 5 * 60 * 1000);
+        //scheduling("DEBUG", 5 * 1000);
+        setMemberOnMap();
+    }
+
+    public void setMemberOnMap() {
+        Log.d(tag, "setMemberOnMap");
+        googleMap.clear();
+
+        for(int ii = 0; ii < members.size(); ii++) {
+            Member member = members.get(ii);
+            Log.d(tag, "map :" + member.toString());
+            if(member.getTracking().equals("true") && !member.getPosition().equals("")) {
+                markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(member.getLat(), member.getLng()));
+                markerOptions.title(member.getName());
+
+                googleMap.addMarker(markerOptions);
+
+                CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(member.getLat(), member.getLng()));
+                CameraUpdate zoom =  CameraUpdateFactory.zoomTo(15);
+
+                googleMap.moveCamera(center);
+                googleMap.animateCamera(zoom);
+            }
+        }
     }
 
     /*
@@ -130,27 +157,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     */
 
     @Override
-    public void onClick(View view) {
-
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
-    @Override
     public boolean onMarkerClick(Marker marker) {
+        if(marker.isInfoWindowShown()) {
+            marker.hideInfoWindow();
+        }
+        else {
+            marker.showInfoWindow();
+        }
+
         return false;
     }
 
@@ -199,7 +213,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         textAction.setText(txt);
     }
 
-    public void scheduleNotification(String action, int delay) {
+    public void scheduling(String action, int delay) {
         Log.d(tag, "scheduleNotification : " + action + " [" + delay + "]");
 
         Intent intent = new Intent(this, ApplicationsReceiver.class);

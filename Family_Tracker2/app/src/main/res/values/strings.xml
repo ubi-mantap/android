@@ -3,7 +3,7 @@
 
     <string name="app_name">Family Tracker</string>
     <string name="title_activity_maps">Map</string>
-    <string name="tracker_map">Tracker_Map</string>
+    <string name="tracker_map">Tracker Map</string>
     <string name="tracking_member">Tracking Member</string>
     <string name="tracker_member">Tracker Member</string>
     <string name="openDrawer">open</string>
