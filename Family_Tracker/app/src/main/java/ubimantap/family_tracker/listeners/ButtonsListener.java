@@ -35,6 +35,8 @@ public class ButtonsListener implements View.OnClickListener {
         new Functions(this.context).tracks(username);
         new Functions(this.context).notifications(username);
 
+        new Functions(this.context).mapTracks(username);
+
         ((Activity) this.context).finish();
         Intent intent = new Intent(this.context, MapsActivity.class);
         this.context.startActivity(intent);
