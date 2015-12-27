@@ -107,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         members = new Functions(this).getMember();
 
         scheduling("NOTIFICATIONS", 5 * 1000);
-        scheduling("TRACKS", 15 * 1000);
+        scheduling("TRACKS", 5 * 60 * 1000);
         //scheduling("DEBUG", 5 * 1000);
         setMemberOnMap();
     }
